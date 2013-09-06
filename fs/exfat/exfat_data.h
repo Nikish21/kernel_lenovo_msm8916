@@ -19,8 +19,8 @@
 /************************************************************************/
 /*                                                                      */
 /*  PROJECT : exFAT & FAT12/16/32 File System                           */
-/*  FILE    : exfat_data.c                                              */
-/*  PURPOSE : exFAT Configuable Data Definitions                        */
+/*  FILE    : exfat_data.h                                              */
+/*  PURPOSE : Header File for exFAT Configuable Constants               */
 /*                                                                      */
 /*----------------------------------------------------------------------*/
 /*  NOTES                                                               */
@@ -32,46 +32,52 @@
 /*                                                                      */
 /************************************************************************/
 
+#ifndef _EXFAT_DATA_H
+#define _EXFAT_DATA_H
+
 #include "exfat_config.h"
 #include "exfat_global.h"
-#include "exfat_data.h"
-#include "exfat_oal.h"
 
-#include "exfat_blkdev.h"
-#include "exfat_cache.h"
-#include "exfat_nls.h"
-#include "exfat_super.h"
-#include "exfat.h"
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-/*======================================================================*/
-/*                                                                      */
-/*                    GLOBAL VARIABLE DEFINITIONS                       */
-/*                                                                      */
-/*======================================================================*/
+  /*======================================================================*/
+	/*                                                                      */
+	/*                        FFS CONFIGURATIONS                            */
+	/*                  (CHANGE THIS PART IF REQUIRED)                      */
+	/*                                                                      */
+	/*======================================================================*/
 
-/*----------------------------------------------------------------------*/
-/*  File Manager                                                        */
-/*----------------------------------------------------------------------*/
+	/* max number of block devices                      */
+#define MAX_DEVICE              2
 
-/* file system volume table */
-FS_STRUCT_T fs_struct[MAX_DRIVE];
+	/* max number of volumes on all block devices       */
+#define MAX_DRIVE               2
 
-#if 0
-/*----------------------------------------------------------------------*/
-/*  Buffer Manager                                                      */
-/*----------------------------------------------------------------------*/
+	/* max number of open files                         */
+#define MAX_OPEN                20
 
-/* FAT cache */
-DECLARE_MUTEX(f_sem);
-BUF_CACHE_T FAT_cache_array[FAT_CACHE_SIZE];
-BUF_CACHE_T FAT_cache_lru_list;
-BUF_CACHE_T FAT_cache_hash_list[FAT_CACHE_HASH_SIZE];
+	/* max number of root directory entries in FAT12/16 */
+	/* (should be an exponential value of 2)            */
+#define MAX_DENTRY              512
 
-/* buf cache */
-DECLARE_MUTEX(b_sem);
-BUF_CACHE_T buf_cache_array[BUF_CACHE_SIZE];
-BUF_CACHE_T buf_cache_lru_list;
-BUF_CACHE_T buf_cache_hash_list[BUF_CACHE_HASH_SIZE];
+	/* cache size (in number of sectors)                */
+	/* (should be an exponential value of 2)            */
+#define FAT_CACHE_SIZE          128
+#define FAT_CACHE_HASH_SIZE     64
+#define BUF_CACHE_SIZE          256
+#define BUF_CACHE_HASH_SIZE     64
+
+#ifndef CONFIG_EXFAT_DEFAULT_CODEPAGE
+#define CONFIG_EXFAT_DEFAULT_CODEPAGE	437
+#define CONFIG_EXFAT_DEFAULT_IOCHARSET	"utf8"
 #endif
 
-/* end of exfat_data.c */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* _EXFAT_DATA_H */
+
+/* end of exfat_data.h */
