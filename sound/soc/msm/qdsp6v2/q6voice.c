@@ -29,6 +29,10 @@
 
 #define TIMEOUT_MS 300
 
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+#include <linux/input/prevent_sleep.h>
+bool in_phone_call = false;
+#endif
 
 #define CMD_STATUS_SUCCESS 0
 #define CMD_STATUS_FAIL 1
@@ -4808,6 +4812,11 @@ static int voice_disable_cvp(uint32_t session_id)
 	if (common.ec_ref_ext)
 		voc_set_ext_ec_ref(AFE_PORT_INVALID, false);
 
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+	in_phone_call = true;
+	pr_debug("%s: set wake_helper in_phone_call: %s\n", __func__, (in_phone_call ? "true" : "false"));
+#endif
+
 done:
 	return ret;
 }
@@ -5312,6 +5321,12 @@ int voc_end_voice_call(uint32_t session_id)
 	}
 	if (common.ec_ref_ext)
 		voc_set_ext_ec_ref(AFE_PORT_INVALID, false);
+
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+	in_phone_call = false;
+	pr_debug("%s: set wake_helper in_phone_call: %s\n", __func__, (in_phone_call ? "true" : "false"));
+#endif
+ 
 
 	mutex_unlock(&v->lock);
 	return ret;
