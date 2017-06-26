@@ -54,6 +54,10 @@ static struct delayed_work AiO_work;
 static struct workqueue_struct *AiO_wq;
 
 int AiO_HotPlug;
+extern int TEMP_SAFETY;
+#ifdef CONFIG_ALUCARD_HOTPLUG
+extern int alucard;
+#endif
 
 #ifdef CONFIG_FRANCO_THERMAL
 #if (NR_CPUS == 6 || NR_CPUS == 8)
@@ -301,8 +305,10 @@ static ssize_t store_toggle(struct kobject *kobj,
 	// Allow AiO HotPlug to be Enabled only when Shoaib's Core Control is Disabled.
 	if (core_control)
 	   return -EINVAL;
-	#endif
-
+#ifdef CONFIG_ALUCARD_HOTPLUG
+	if (alucard)
+	   return -EINVAL; 
+#endif	
 	if (val == AiO.toggle)
 	   return count;
 
