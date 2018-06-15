@@ -505,10 +505,8 @@ static int qpnp_vibrator_probe(struct spmi_device *spmi)
 	if (rc < 0)
 		goto error_create_default;
 
-<<<<<<< HEAD
 	return 0;
 
-<<<<<<< HEAD
 error_create_default:
 	device_remove_file(vib->timed_dev.dev, &dev_attr_vtg_max);
 error_create_max:
@@ -517,12 +515,6 @@ error_create_min:
 	device_remove_file(vib->timed_dev.dev, &dev_attr_vtg_level);
 error_create_level:
 	timed_output_dev_unregister(&vib->timed_dev);
-=======
-	device_create_file(vib->timed_dev.dev, &dev_attr_vtg_level);
-
->>>>>>> 6554d5c4f57e... qpnp-vibrator: implement sysfs interface for vibrator intensity control
-=======
->>>>>>> parent of 6554d5c4f57e... qpnp-vibrator: implement sysfs interface for vibrator intensity control
 	return rc;
 }
 
